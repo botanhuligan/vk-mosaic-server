@@ -1,2 +1,4 @@
 results/*
 downloaded/*
+.idea
+__pycache__
