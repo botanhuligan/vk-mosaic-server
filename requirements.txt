@@ -1,0 +1,4 @@
+pho-mos==0.0.4
+flask
+pillow
+imageio

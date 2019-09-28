@@ -1,0 +1,22 @@
+version: '3.6'
+services:
+
+  back:
+      volumes:
+        - .:/app
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: mosaic-server
+      ports:
+        - 9082:9082
+      hostname: mosaic-server
+      command: python3 server.py
+      networks:
+        - server
+      restart: always
+
+
+networks:
+  server:
+    external: true
