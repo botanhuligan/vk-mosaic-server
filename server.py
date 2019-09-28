@@ -1,6 +1,6 @@
 import uuid
 
-from flask import Flask, request, redirect, url_for, flash, send_file
+from flask import Flask, request, redirect, url_for, flash, send_file, after_this_request
 from werkzeug.utils import secure_filename
 import os
 
@@ -38,9 +38,20 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = str(uuid.uuid4()) + "." + ext(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            new_filename = create(filename)
-            return send_file(new_filename, mimetype='image/png')
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_path))
+            new_file_path = create(file_path)
+
+            @after_this_request
+            def remove_file(response):
+                try:
+                    os.remove(file_path)
+                    os.remove(new_file_path)
+                except Exception as error:
+                    app.logger.error("Error removing or closing downloaded file handle", error)
+                return response
+
+            return send_file(new_file_path, mimetype='image/png')
 
     return 'fail'
 

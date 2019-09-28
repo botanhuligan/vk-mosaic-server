@@ -10,7 +10,7 @@ def create(filename):
     path = THIS_FILE_PATH + "/results/{0}.jpg".format(name)
     # Мы 2
     create_mosaic(
-        img_path=THIS_FILE_PATH + "/downloaded/" + filename,
+        img_path=filename,
         source_dirs=[THIS_FILE_PATH + "/imgs/"],
         target_path=path,
         resize_factor=0.1,
